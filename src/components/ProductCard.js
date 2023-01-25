@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
   const {dispatch} =useProducts()
 
   return (
-    <div
+    <div 
       className='shadow-lg rounded-3xl border  p-3 flex flex-col text-indigo-900'
       key={product._id}
     >
@@ -33,6 +33,7 @@ const ProductCard = ({ product }) => {
         <button
           title='Add to wishlist'
           className='bg-indigo-500  py-1 px-2 rounded-full'
+          onClick={()=> dispatch({type: actionTypes.ADD_TO_WISHLIST, payload : product})}
         >
           <BiListPlus className='text-white' />
         </button>
