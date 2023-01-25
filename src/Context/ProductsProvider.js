@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { useReducer } from 'react';
 import { useContext } from 'react';
 import { actionTypes } from '../State/ProductState/ActionTypes';
@@ -23,7 +23,7 @@ const [state, dispatch] = useReducer(productReducer, initialState)
       })
     },[])
   
-    console.log(state.products);
+    console.log(state);
     const value ={
         state,
         dispatch,
