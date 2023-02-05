@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-const ProductList = () => {
+const ProductList = () => { 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("https://moon-tech-server-ruddy.vercel.app/products")
       .then((res) => res.json())
       .then((data) => setProducts(data.data));
   });
