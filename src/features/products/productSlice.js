@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {fetchProducts, postProduct} from './productApi'
+import {deleteProduct, fetchProducts, postProduct} from './productApi'
 export const initialState = {
     products : [],
     isLoading : false,
     isError : false,
     error : "",
     postSuccess : false,
+    deleteSuccess : false,
 };
 
 export const getProducts =createAsyncThunk("products/getProduct", async () =>{
@@ -19,6 +20,12 @@ export const addProduct =createAsyncThunk("product/addProduct", async (data) =>{
    return product;
 
 });
+export const removeProduct =createAsyncThunk("product/removeProduct", async (_id,thunkAPI) =>{
+   const product =await deleteProduct(_id);
+   thunkAPI.dispatch(removeFormList(_id));
+   return product;
+
+});
 
 const productSlice =createSlice({
     name : 'products',
@@ -26,6 +33,14 @@ const productSlice =createSlice({
      reducers : {
       togglePostSuccess : (state) =>{
         state.postSuccess = false;
+      },
+      toggleDeleteSuccess : (state) =>{
+        state.deleteSuccess = false;
+      },
+      removeFormList : (state,action)=>{
+        state.products = state.products.filter(
+          product => product._id !== action.payload
+          )
       }
      },
    extraReducers : (builder)=>{
@@ -64,11 +79,28 @@ const productSlice =createSlice({
     state.isError =true;
     state.error = action.error.message;
  })
+  
+//  Delete method
+.addCase(removeProduct.pending,(state,action)=>{
+  state.isLoading =true;
+  state.deleteSuccess =false;
+  state.isError =true;
+})
+.addCase(removeProduct.fulfilled,(state,action)=>{
+  state.deleteSuccess =true;
+  state.isLoading =false;
+})
+.addCase(removeProduct.rejected,(state, action)=>{
+  state.products = [];
+  state.isLoading =false;
+  state.deleteSuccess =false;
+  state.isError =true;
+  state.error = action.error.message;
+})
 
-
-   },
+   }, 
 });
 
 
-export const {togglePostSuccess} = productSlice.actions;
+export const {togglePostSuccess,toggleDeleteSuccess,removeFormList} = productSlice.actions;
 export default productSlice.reducer;
